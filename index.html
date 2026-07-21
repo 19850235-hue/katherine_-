@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, viewport-fit=cover">
+  <meta name="theme-color" content="#2b0f5c">
+  <title>Jardín Mágico Neón 🌌🌸</title>
+  <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;600&family=Quicksand:wght@500;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<!-- ===================== JARDÍN ===================== -->
+<div class="scene" id="scene">
+  <div class="titulo-box">
+    <h1 class="titulo">🌸 El Jardín de Katherine 🌸</h1>
+    <p class="bienvenida" id="mensajeBienvenida"></p>
+  </div>
+
+  <div class="sun-container">
+    <div class="sun"></div>
+  </div>
+
+  <div class="arcoiris"></div>
+
+  <div class="cloud cloud1"></div>
+  <div class="cloud cloud2"></div>
+
+  <div class="mariposa" tabindex="0" role="button" aria-label="Mariposa, toca para un mensaje" style="top: 45%; left: 15%;">🦋</div>
+  <div class="mariposa" tabindex="0" role="button" aria-label="Mariposa, toca para un mensaje" style="top: 38%; left: 75%; animation-delay: -3s;">🦋</div>
+  <div class="mariposa" tabindex="0" role="button" aria-label="Mariposa, toca para un mensaje" style="top: 55%; left: 50%; animation-delay: -6s;">🦋</div>
+
+  <div class="pasto-fondo"></div>
+  <div id="jardin-fondo" class="jardin-capa-fondo"></div>
+
+  <div class="pasto-frente" id="pasto"></div>
+  <div id="jardin-frente" class="jardin-capa-frente"></div>
+
+  <div class="acciones">
+    <button id="btnPassword" class="btn-accion btn-candado" aria-label="Abrir mensaje secreto con contraseña">🔒 Mensaje Secreto</button>
+    <button id="btnUniverso" class="btn-accion btn-universo" aria-label="Ir a la sección del universo">🪐 Ir al Universo</button>
+    <button id="btnCarta" class="btn-accion btn-carta" aria-label="Leer la carta completa">📜 Carta Completa</button>
+    <button id="btnRespuesta" class="btn-accion btn-respuesta" aria-label="Enviar una respuesta a Katherine">💌 Enviar Respuesta</button>
+    <button id="btnCierre" class="btn-accion btn-cierre" aria-label="Terminar la visita al jardín">🌙 Terminar Visita</button>
+  </div>
+
+  <p class="instruccion">🌷 Toca las flores neón o haz clic en el césped para hacer crecer el jardín</p>
+</div>
+
+<!-- ===================== MODAL CONTRASEÑA ===================== -->
+<div class="modal-overlay" id="modalPassword" role="dialog" aria-modal="true">
+  <div class="modal-caja">
+    <button class="cerrar-modal" id="cerrarModalPassword">✖</button>
+    <h2>🔐 Mensaje Secreto</h2>
+    <p class="pista">Pista: es tu nombre ✨</p>
+    <input type="password" id="inputPassword" placeholder="Escribe la contraseña...">
+    <button id="btnConfirmar" class="btn-confirmar">Entrar 💌</button>
+    <p id="errorPassword" class="error-msg"></p>
+  </div>
+</div>
+
+<!-- ===================== MODAL SECRETO REVELADO ===================== -->
+<div class="modal-overlay" id="modalSecreto" role="dialog" aria-modal="true">
+  <div class="modal-caja secreto">
+    <button class="cerrar-modal" id="cerrarModalSecreto">✖</button>
+    <div class="corazones-flotantes" id="corazonesFlotantes"></div>
+    <h2>💖 Para Katherine 💖</h2>
+    <p id="textoSecreto"></p>
+  </div>
+</div>
+
+<!-- ===================== MODAL CARTA COMPLETA ===================== -->
+<div class="modal-overlay" id="modalCarta" role="dialog" aria-modal="true">
+  <div class="modal-caja carta">
+    <button class="cerrar-modal" id="cerrarModalCarta">✖</button>
+    <h2>📜 Para Katherine</h2>
+    <div class="texto-carta" id="textoCarta"></div>
+  </div>
+</div>
+
+<!-- ===================== MODAL RESPUESTA ===================== -->
+<div class="modal-overlay" id="modalRespuesta" role="dialog" aria-modal="true">
+  <div class="modal-caja respuesta">
+    <button class="cerrar-modal" id="cerrarModalRespuesta">✖</button>
+    <h2>💌 ¿Te gustó tu jardín?</h2>
+    <p class="pista">Déjame una respuesta, ¡me encantaría leerla! 🌷</p>
+
+    <div class="reacciones-rapidas" id="reaccionesRapidas">
+      <button class="chip-reaccion" data-texto="¡Me encantó todo! 😍">😍 Me encantó</button>
+      <button class="chip-reaccion" data-texto="Me emocioné muchísimo 🥹">🥹 Me emocionó</button>
+      <button class="chip-reaccion" data-texto="Es lo más bonito que me han hecho 💖">💖 Es hermoso</button>
+    </div>
+
+    <textarea id="textoRespuesta" rows="4" placeholder="Escribe aquí tu respuesta para Katherine..."></textarea>
+
+    <div class="botones-envio">
+      <button id="btnEnviarWhatsapp" class="btn-envio btn-whatsapp">📲 WhatsApp</button>
+      <button id="btnEnviarEmail" class="btn-envio btn-email">✉️ Email</button>
+    </div>
+    <p id="estadoRespuesta" class="estado-respuesta"></p>
+  </div>
+</div>
+
+<!-- ===================== UNIVERSO ===================== -->
+<div class="universo" id="universo">
+  <button class="btn-volver" id="btnVolver">🌸 Volver al Jardín</button>
+  <canvas id="canvasUniverso"></canvas>
+  <div class="tarjeta-mensaje" id="tarjetaMensaje">
+    <p id="textoUniverso"></p>
+    <span id="contadorMensajes"></span>
+  </div>
+  <p class="instruccion-universo">✨ Toca las estrellas que orbitan Saturno, la constelación de corazón o el otro planeta ✨</p>
+</div>
+
+<!-- ===================== PANTALLA DE CIERRE ===================== -->
+<div class="despedida" id="despedida">
+  <div class="corazones-flotantes" id="corazonesDespedida"></div>
+  <div class="despedida-contenido">
+    <h2>🌙 Gracias por visitar tu jardín 🌙</h2>
+    <p id="textoDespedida">Katherine, espero que este pequeño rincón mágico te haya sacado una sonrisa. Aquí estará esperándote cuando quieras volver. 💖</p>
+    <p class="stats-despedida" id="statsDespedida"></p>
+    <button id="btnReiniciar" class="btn-confirmar">Volver al Jardín 🌸</button>
+  </div>
+</div>
+
+<script src="scrip.js"></script>
+</body>
+</html>>

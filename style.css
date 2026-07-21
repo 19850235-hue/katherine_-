@@ -1,0 +1,852 @@
+* { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+
+html, body {
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  overscroll-behavior: none;
+  font-family: 'Quicksand', sans-serif;
+  background: #0b0221;
+  -webkit-text-size-adjust: 100%;
+  text-size-adjust: 100%;
+}
+
+/* ===================== JARDÍN ===================== */
+.scene {
+  position: relative;
+  width: 100%;
+  height: 100vh;
+  height: 100dvh; /* altura real en móvil, sin saltos por la barra del navegador */
+  background: linear-gradient(to bottom,
+    #2b0f5c 0%,
+    #6a2c8f 25%,
+    #d24fa0 55%,
+    #ff9de2 80%,
+    #ffd6a8 100%);
+  overflow: hidden;
+}
+
+.titulo-box {
+  position: absolute;
+  top: max(18px, env(safe-area-inset-top));
+  width: 100%;
+  text-align: center;
+  z-index: 10;
+}
+
+.titulo {
+  font-family: 'Fredoka', sans-serif;
+  font-size: clamp(1.3em, 5vw, 2.1em);
+  color: #fff;
+  letter-spacing: 1px;
+  text-shadow:
+    0 0 8px #ff6fd8,
+    0 0 18px #ff6fd8,
+    0 0 30px #ff2fb8,
+    2px 2px 0 rgba(0,0,0,0.15);
+}
+
+.bienvenida {
+  color: white;
+  font-size: 0.85em;
+  margin-top: 4px;
+  text-shadow: 0 0 8px rgba(255,111,216,0.6);
+  opacity: 0;
+  animation: apareceSuave 0.8s ease 0.3s forwards;
+}
+@keyframes apareceSuave {
+  from { opacity: 0; transform: translateY(-4px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* Sol neón */
+.sun-container {
+  position: absolute;
+  top: 6%;
+  left: 10%;
+}
+.sun {
+  width: 90px;
+  height: 90px;
+  border-radius: 50%;
+  background: radial-gradient(circle, #fffbd6 0%, #ffe066 45%, #ff9f43 100%);
+  box-shadow:
+    0 0 40px 12px #ffe066,
+    0 0 90px 30px rgba(255, 159, 67, 0.6);
+  animation: pulso 3s ease-in-out infinite;
+}
+@keyframes pulso {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.1); }
+}
+
+/* Nubes */
+.cloud {
+  position: absolute;
+  background: rgba(255,255,255,0.85);
+  border-radius: 50px;
+  filter: drop-shadow(0 0 10px rgba(255,255,255,0.5));
+  animation: flotar linear infinite;
+}
+.cloud::before, .cloud::after {
+  content: '';
+  position: absolute;
+  background: inherit;
+  border-radius: 50%;
+}
+.cloud1 { width: 100px; height: 35px; top: 14%; left: -150px; animation-duration: 40s; }
+.cloud1::before { width: 55px; height: 55px; top: -25px; left: 10px; }
+.cloud1::after { width: 45px; height: 45px; top: -18px; left: 55px; }
+
+.cloud2 { width: 75px; height: 28px; top: 24%; left: -120px; animation-duration: 55s; animation-delay: -15s; }
+.cloud2::before { width: 40px; height: 40px; top: -20px; left: 8px; }
+.cloud2::after { width: 32px; height: 32px; top: -14px; left: 40px; }
+
+@keyframes flotar {
+  from { transform: translateX(0); }
+  to { transform: translateX(120vw); }
+}
+
+/* Arcoíris neón */
+.arcoiris {
+  position: absolute;
+  top: -90px;
+  right: 4%;
+  width: 260px;
+  height: 260px;
+  border-radius: 50%;
+  background:
+    radial-gradient(circle, transparent 54%, #ff2fb8 55% 59%, #ff9f43 60% 64%, #ffe066 65% 69%,
+    #7dff9f 70% 74%, #4dd7ff 75% 79%, #b06bff 80% 84%, transparent 85%);
+  opacity: 0.85;
+  filter: drop-shadow(0 0 12px rgba(255,255,255,0.4));
+}
+
+.mariposa {
+  position: absolute;
+  font-size: 22px;
+  touch-action: manipulation;
+  filter: drop-shadow(0 0 6px rgba(255,255,255,0.6));
+  animation: revolotear 8s ease-in-out infinite;
+}
+@keyframes revolotear {
+  0%, 100% { transform: translate(0,0) rotate(0deg); }
+  25% { transform: translate(30px,-25px) rotate(10deg); }
+  50% { transform: translate(60px,5px) rotate(-8deg); }
+  75% { transform: translate(20px,-15px) rotate(5deg); }
+}
+
+/* Pasto con brillo */
+.pasto-fondo, .pasto-frente {
+  position: absolute;
+  bottom: 0;
+  width: 100%;
+  z-index: 2;
+}
+.pasto-fondo {
+  height: 22%;
+  background: linear-gradient(to bottom, #3d1e6d 0%, #2a1250 100%);
+  opacity: 0.6;
+}
+.pasto-frente {
+  height: 30%;
+  background: linear-gradient(to bottom, #1f0f45 0%, #120a2e 100%);
+  box-shadow: 0 -6px 25px rgba(255, 111, 216, 0.35);
+  cursor: pointer;
+  touch-action: manipulation;
+}
+
+.jardin-capa-fondo, .jardin-capa-frente {
+  position: absolute;
+  bottom: 0;
+  width: 100%;
+  height: 32%;
+  z-index: 3;
+  pointer-events: none;
+}
+.jardin-capa-fondo { opacity: 0.65; transform: scale(0.75); }
+.jardin-capa-frente { z-index: 4; pointer-events: auto; }
+
+/* Flores neón — versión realista */
+.flor {
+  position: absolute;
+  bottom: 6%;
+  cursor: pointer;
+  touch-action: manipulation;
+  transform-origin: bottom center;
+  animation: mecer 3.5s ease-in-out infinite;
+  filter: drop-shadow(0 10px 8px rgba(0,0,0,0.35));
+}
+@keyframes mecer {
+  0%, 100% { transform: rotate(-3deg); }
+  50% { transform: rotate(3deg); }
+}
+
+.sombra-flor {
+  position: absolute;
+  bottom: -3px;
+  left: 50%;
+  width: 34px;
+  height: 8px;
+  background: radial-gradient(ellipse, rgba(0,0,0,0.45), transparent 70%);
+  transform: translateX(-50%);
+  border-radius: 50%;
+  z-index: 0;
+}
+
+.tallo {
+  position: relative;
+  width: 6px;
+  height: 68px;
+  margin: 0 auto;
+  background: linear-gradient(to right, #14532d 0%, #2f9e56 35%, #4ade80 60%, #1f7a3d 100%);
+  border-radius: 3px 3px 2px 2px;
+  box-shadow: 0 0 6px rgba(55, 201, 106, 0.5);
+  transform: rotate(-1.5deg);
+}
+.hoja {
+  position: absolute;
+  width: 20px;
+  height: 12px;
+  background: linear-gradient(135deg, #4ade80, #1f7a3d);
+  border-radius: 0 100% 0 100%;
+  top: 26px;
+  left: -16px;
+  box-shadow: 0 0 6px rgba(55, 201, 106, 0.4), inset -2px -2px 4px rgba(0,0,0,0.25);
+  transform: rotate(-15deg);
+}
+.hoja::after {
+  content: '';
+  position: absolute;
+  top: 3px;
+  left: 3px;
+  width: 12px;
+  height: 1px;
+  background: rgba(255,255,255,0.35);
+  border-radius: 1px;
+  transform: rotate(8deg);
+}
+.hoja.derecha { left: 10px; border-radius: 100% 0 100% 0; transform: rotate(15deg) scaleX(-1); }
+
+.cabeza {
+  position: relative;
+  width: 64px;
+  height: 64px;
+  margin: -60px auto 0;
+  z-index: 2;
+}
+
+/* Capa trasera de pétalos: más grande y ligeramente rotada -> da profundidad */
+.petalos-capa {
+  position: absolute;
+  inset: 0;
+}
+.petalos-capa.trasera {
+  transform: rotate(24deg) scale(0.92);
+  opacity: 0.85;
+  filter: brightness(0.85);
+}
+
+.petalo {
+  position: absolute;
+  width: 20px;
+  height: 30px;
+  top: 12px;
+  left: 22px;
+  border-radius: 60% 60% 60% 60% / 75% 75% 25% 25%;
+  transform-origin: center 20px;
+  box-shadow: inset 0 -4px 6px rgba(0,0,0,0.15), inset 0 4px 5px rgba(255,255,255,0.35);
+}
+.petalo::after {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 1px;
+  height: 60%;
+  background: rgba(255,255,255,0.3);
+  transform: translate(-50%, -20%);
+  border-radius: 1px;
+}
+
+.centro {
+  position: absolute;
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  background: radial-gradient(circle at 35% 30%, #fffdf0, #ffe066 55%, #e6a817 100%);
+  top: 23px;
+  left: 23px;
+  z-index: 3;
+  box-shadow: 0 0 12px rgba(255,224,102,0.9), inset -2px -2px 4px rgba(150,90,0,0.35);
+}
+.centro::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: 50%;
+  background-image:
+    radial-gradient(circle, rgba(150,90,0,0.4) 1px, transparent 1.2px);
+  background-size: 5px 5px;
+  background-position: 1px 1px, 3px 3px;
+  opacity: 0.6;
+}
+
+.rosa .petalo { background: radial-gradient(circle at 32% 28%, #ffd9f5, #ff6fd8 55%, #d1108f 100%); box-shadow: 0 0 10px #ff6fd8, inset 0 -4px 6px rgba(120,0,70,0.25); }
+.lila .petalo { background: radial-gradient(circle at 32% 28%, #ecdaff, #b06bff 55%, #7a1fd6 100%); box-shadow: 0 0 10px #b06bff, inset 0 -4px 6px rgba(60,0,100,0.25); }
+.celeste .petalo { background: radial-gradient(circle at 32% 28%, #d9f6ff, #4dd7ff 55%, #0b8fc9 100%); box-shadow: 0 0 10px #4dd7ff, inset 0 -4px 6px rgba(0,60,90,0.25); }
+.amarilla .petalo { background: radial-gradient(circle at 32% 28%, #fffbe0, #ffe066 55%, #e0a300 100%); box-shadow: 0 0 10px #ffe066, inset 0 -4px 6px rgba(120,80,0,0.25); }
+.naranja .petalo { background: radial-gradient(circle at 32% 28%, #ffe6cc, #ff9f43 55%, #d95f00 100%); box-shadow: 0 0 10px #ff9f43, inset 0 -4px 6px rgba(120,50,0,0.25); }
+.verde .petalo { background: radial-gradient(circle at 32% 28%, #e3ffea, #4ade80 55%, #1f8a4c 100%); box-shadow: 0 0 10px #37c96a, inset 0 -4px 6px rgba(0,70,30,0.25); }
+
+/* Variante GIRASOL: centro grande, pétalos más delgados y alargados */
+.flor.tipo-girasol .cabeza { width: 72px; height: 72px; }
+.flor.tipo-girasol .petalo {
+  width: 14px;
+  height: 36px;
+  top: 6px;
+  left: 25px;
+  border-radius: 50% 50% 50% 50% / 85% 85% 15% 15%;
+}
+.flor.tipo-girasol .centro {
+  width: 28px;
+  height: 28px;
+  top: 18px;
+  left: 18px;
+  background: radial-gradient(circle at 35% 30%, #8a5a1f, #5a3a10 60%, #3a2408 100%);
+  box-shadow: 0 0 10px rgba(139,90,30,0.7), inset -2px -2px 4px rgba(0,0,0,0.4);
+}
+.flor.tipo-girasol .centro::before { background-image: radial-gradient(circle, rgba(255,224,102,0.5) 1px, transparent 1.2px); }
+
+/* Variante ESTRELLA: pétalos puntiagudos tipo destello neón */
+.flor.tipo-estrella .petalo {
+  width: 24px;
+  height: 34px;
+  top: 8px;
+  left: 20px;
+  border-radius: 0;
+  clip-path: polygon(50% 0%, 68% 38%, 100% 50%, 68% 62%, 50% 100%, 32% 62%, 0% 50%, 32% 38%);
+}
+.flor.tipo-estrella .centro {
+  box-shadow: 0 0 16px rgba(255,224,102,1), inset -2px -2px 4px rgba(150,90,0,0.35);
+}
+
+/* Botones de acción */
+.acciones {
+  position: absolute;
+  top: 90px;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  gap: 14px;
+  z-index: 10;
+  flex-wrap: wrap;
+  padding: 0 12px;
+}
+.btn-accion {
+  font-family: 'Quicksand', sans-serif;
+  font-weight: 700;
+  font-size: 0.95em;
+  padding: 10px 18px;
+  border: none;
+  border-radius: 30px;
+  cursor: pointer;
+  color: white;
+  touch-action: manipulation;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+.btn-accion:hover { transform: translateY(-3px) scale(1.05); }
+
+.btn-candado {
+  background: linear-gradient(135deg, #ff6fd8, #ff2fb8);
+  box-shadow: 0 0 14px rgba(255, 47, 184, 0.7);
+}
+.btn-universo {
+  background: linear-gradient(135deg, #4dd7ff, #a24bff);
+  box-shadow: 0 0 14px rgba(162, 75, 255, 0.7);
+}
+.btn-respuesta {
+  background: linear-gradient(135deg, #ffe066, #ff9f43);
+  color: #4a1a00;
+  box-shadow: 0 0 14px rgba(255, 159, 67, 0.7);
+}
+.btn-carta {
+  background: linear-gradient(135deg, #d9b3ff, #7a1fd6);
+  box-shadow: 0 0 14px rgba(122, 31, 214, 0.7);
+}
+.btn-cierre {
+  background: linear-gradient(135deg, #6b7fb3, #2a3a63);
+  box-shadow: 0 0 14px rgba(42, 58, 99, 0.7);
+}
+
+.instruccion {
+  position: absolute;
+  bottom: 10px;
+  width: 100%;
+  text-align: center;
+  color: white;
+  text-shadow: 0 0 8px rgba(255,111,216,0.6);
+  font-size: 0.9em;
+  z-index: 10;
+}
+
+/* ===================== MODALES ===================== */
+.modal-overlay {
+  display: none;
+  position: fixed;
+  inset: 0;
+  background: rgba(10, 2, 30, 0.75);
+  backdrop-filter: blur(4px);
+  z-index: 100;
+  align-items: center;
+  justify-content: center;
+}
+.modal-overlay.activo {
+  display: flex;
+}
+
+.modal-caja {
+  position: relative;
+  background: linear-gradient(160deg, #2b0f5c, #4a1a7a);
+  border: 2px solid rgba(255,111,216,0.5);
+  border-radius: 24px;
+  padding: 32px 26px;
+  width: min(90%, 380px);
+  text-align: center;
+  color: white;
+  box-shadow: 0 0 40px rgba(255, 111, 216, 0.4);
+  overflow: hidden;
+}
+.modal-caja h2 {
+  font-family: 'Fredoka', sans-serif;
+  margin-bottom: 10px;
+  text-shadow: 0 0 10px #ff6fd8;
+}
+.pista {
+  font-size: 0.85em;
+  opacity: 0.8;
+  margin-bottom: 16px;
+}
+.modal-caja input {
+  width: 100%;
+  padding: 10px 14px;
+  border-radius: 20px;
+  border: none;
+  outline: none;
+  text-align: center;
+  font-size: max(1em, 16px);
+  margin-bottom: 14px;
+}
+.btn-confirmar {
+  background: linear-gradient(135deg, #ff6fd8, #ff2fb8);
+  color: white;
+  border: none;
+  padding: 10px 22px;
+  border-radius: 30px;
+  font-weight: 700;
+  cursor: pointer;
+  box-shadow: 0 0 14px rgba(255,47,184,0.6);
+}
+.error-msg {
+  color: #ffb3b3;
+  font-size: 0.85em;
+  margin-top: 10px;
+  min-height: 16px;
+}
+.cerrar-modal {
+  position: absolute;
+  top: 12px;
+  right: 14px;
+  background: none;
+  border: none;
+  color: white;
+  font-size: 1.1em;
+  cursor: pointer;
+  opacity: 0.7;
+}
+.cerrar-modal:hover { opacity: 1; }
+
+.modal-caja.secreto #textoSecreto {
+  font-size: 1.05em;
+  line-height: 1.5em;
+  margin-top: 10px;
+  position: relative;
+  z-index: 2;
+}
+.corazones-flotantes {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  pointer-events: none;
+  z-index: 1;
+}
+.corazon-flotante {
+  position: absolute;
+  bottom: -20px;
+  font-size: 1.2em;
+  animation: subirCorazon 4s linear forwards;
+  opacity: 0.9;
+}
+@keyframes subirCorazon {
+  0% { transform: translateY(0) translateX(0) rotate(0deg); opacity: 0.9; }
+  100% { transform: translateY(-260px) translateX(var(--drift, 20px)) rotate(20deg); opacity: 0; }
+}
+
+/* ===================== MODAL CARTA COMPLETA ===================== */
+.modal-caja.carta {
+  text-align: left;
+  max-height: 78vh;
+  display: flex;
+  flex-direction: column;
+}
+.modal-caja.carta h2 { text-align: center; }
+.texto-carta {
+  overflow-y: auto;
+  padding-right: 6px;
+  margin-top: 8px;
+}
+.texto-carta p {
+  margin-bottom: 14px;
+  line-height: 1.6em;
+  font-size: 0.98em;
+}
+.texto-carta::-webkit-scrollbar { width: 6px; }
+.texto-carta::-webkit-scrollbar-thumb {
+  background: rgba(255,111,216,0.5);
+  border-radius: 10px;
+}
+
+/* ===================== MODAL RESPUESTA ===================== */
+.modal-caja.respuesta { text-align: left; }
+.modal-caja.respuesta h2 { text-align: center; }
+.modal-caja.respuesta .pista { text-align: center; }
+
+.reacciones-rapidas {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  justify-content: center;
+  margin-bottom: 14px;
+}
+.chip-reaccion {
+  background: rgba(255,255,255,0.12);
+  border: 1px solid rgba(255,111,216,0.5);
+  color: white;
+  font-family: 'Quicksand', sans-serif;
+  font-weight: 700;
+  font-size: 0.8em;
+  padding: 7px 12px;
+  border-radius: 20px;
+  cursor: pointer;
+  transition: transform 0.15s ease, background 0.15s ease;
+}
+.chip-reaccion:hover { transform: translateY(-2px); background: rgba(255,111,216,0.35); }
+.chip-reaccion.activo { background: linear-gradient(135deg, #ff6fd8, #ff2fb8); border-color: transparent; }
+
+#textoRespuesta {
+  width: 100%;
+  resize: vertical;
+  border-radius: 14px;
+  border: none;
+  outline: none;
+  padding: 12px 14px;
+  font-family: 'Quicksand', sans-serif;
+  font-size: max(0.95em, 16px);
+  color: #2b0f5c;
+  margin-bottom: 14px;
+}
+
+.botones-envio {
+  display: flex;
+  gap: 10px;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+.btn-envio {
+  font-family: 'Quicksand', sans-serif;
+  font-weight: 700;
+  font-size: 0.9em;
+  padding: 10px 18px;
+  border: none;
+  border-radius: 30px;
+  cursor: pointer;
+  color: white;
+  transition: transform 0.2s ease;
+}
+.btn-envio:hover { transform: translateY(-2px) scale(1.03); }
+.btn-whatsapp { background: linear-gradient(135deg, #4ade80, #16a34a); box-shadow: 0 0 14px rgba(22,163,74,0.6); }
+.btn-email { background: linear-gradient(135deg, #4dd7ff, #a24bff); box-shadow: 0 0 14px rgba(162,75,255,0.6); }
+
+.estado-respuesta {
+  text-align: center;
+  margin-top: 12px;
+  font-size: 0.85em;
+  min-height: 16px;
+  color: #ffe066;
+}
+
+/* ===================== UNIVERSO ===================== */
+.universo {
+  display: none;
+  position: fixed;
+  inset: 0;
+  background: radial-gradient(ellipse at center, #1a0a3d 0%, #05010f 80%);
+  z-index: 50;
+  overflow: hidden;
+}
+.universo.activo {
+  display: block;
+}
+.universo::before,
+.universo::after {
+  content: '';
+  position: absolute;
+  border-radius: 50%;
+  filter: blur(60px);
+  opacity: 0.35;
+  pointer-events: none;
+  z-index: 1;
+  animation: nebulaFlotar 30s ease-in-out infinite;
+}
+.universo::before {
+  width: 45vw;
+  height: 45vw;
+  background: radial-gradient(circle, #a24bff, transparent 70%);
+  top: -10%;
+  left: -10%;
+}
+.universo::after {
+  width: 40vw;
+  height: 40vw;
+  background: radial-gradient(circle, #ff2fb8, transparent 70%);
+  bottom: -12%;
+  right: -8%;
+  animation-delay: -15s;
+}
+@keyframes nebulaFlotar {
+  0%, 100% { transform: translate(0, 0) scale(1); }
+  50% { transform: translate(4%, -3%) scale(1.15); }
+}
+#canvasUniverso {
+  display: block;
+  width: 100%;
+  height: 100%;
+  position: relative;
+  z-index: 2;
+  touch-action: manipulation;
+}
+.btn-volver {
+  position: absolute;
+  top: max(16px, env(safe-area-inset-top));
+  left: max(16px, env(safe-area-inset-left));
+  z-index: 60;
+  background: linear-gradient(135deg, #ff6fd8, #ff2fb8);
+  color: white;
+  border: none;
+  padding: 10px 18px;
+  border-radius: 30px;
+  font-weight: 700;
+  font-family: 'Quicksand', sans-serif;
+  cursor: pointer;
+  box-shadow: 0 0 14px rgba(255,47,184,0.6);
+}
+.instruccion-universo {
+  position: absolute;
+  bottom: 14px;
+  width: 100%;
+  text-align: center;
+  color: #d9c9ff;
+  text-shadow: 0 0 8px rgba(162,75,255,0.6);
+  font-size: 0.9em;
+  z-index: 60;
+}
+.tarjeta-mensaje {
+  display: block;
+  position: absolute;
+  bottom: 60px;
+  left: 50%;
+  background: linear-gradient(160deg, rgba(43,15,92,0.95), rgba(74,26,122,0.95));
+  border: 2px solid rgba(162,75,255,0.6);
+  border-radius: 20px;
+  padding: 18px 24px;
+  max-width: min(85%, 420px);
+  text-align: center;
+  color: white;
+  box-shadow: 0 0 30px rgba(162,75,255,0.6);
+  z-index: 60;
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+  transform: translate(-50%, 12px) scale(0.96);
+  transition: opacity 0.35s ease, transform 0.35s ease;
+}
+.tarjeta-mensaje.activa {
+  opacity: 1;
+  visibility: visible;
+  pointer-events: auto;
+  transform: translate(-50%, 0) scale(1);
+}
+.tarjeta-mensaje p {
+  font-size: 1em;
+  line-height: 1.4em;
+  margin-bottom: 8px;
+}
+.tarjeta-mensaje span {
+  font-size: 0.75em;
+  opacity: 0.7;
+}
+/* ===================== PANTALLA DE CIERRE / DESPEDIDA ===================== */
+.despedida {
+  display: none;
+  position: fixed;
+  inset: 0;
+  z-index: 200;
+  background: radial-gradient(ellipse at center, #1a0a3d 0%, #05010f 85%);
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  overflow: hidden;
+  opacity: 0;
+  transition: opacity 0.6s ease;
+}
+.despedida.activo {
+  display: flex;
+  opacity: 1;
+}
+.despedida-contenido {
+  position: relative;
+  z-index: 2;
+  color: white;
+  max-width: min(90%, 480px);
+  padding: 20px;
+}
+.despedida-contenido h2 {
+  font-family: 'Fredoka', sans-serif;
+  font-size: 1.6em;
+  margin-bottom: 16px;
+  text-shadow: 0 0 12px #a24bff, 0 0 24px #ff6fd8;
+}
+.despedida-contenido p {
+  line-height: 1.6em;
+  margin-bottom: 14px;
+  opacity: 0.95;
+}
+.stats-despedida {
+  font-size: 0.9em;
+  color: #ffe066;
+  opacity: 0.9 !important;
+}
+
+/* ===================== ACCESIBILIDAD ===================== */
+.btn-accion:focus-visible,
+.flor:focus-visible,
+.mariposa:focus-visible,
+.chip-reaccion:focus-visible,
+.cerrar-modal:focus-visible,
+.btn-confirmar:focus-visible,
+.btn-envio:focus-visible,
+.btn-volver:focus-visible {
+  outline: 3px solid #ffe066;
+  outline-offset: 3px;
+}
+
+.mariposa {
+  cursor: pointer;
+}
+
+/* Zona de toque más grande para cerrar modales, sin cambiar el tamaño visual */
+.cerrar-modal {
+  padding: 10px;
+  margin: -10px;
+}
+
+/* Respeta la preferencia del sistema de reducir animaciones */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+/* ===================== RESPONSIVE / MÓVIL ===================== */
+@media (max-width: 640px) {
+  .titulo-box { top: 10px; }
+  .sun-container { transform: scale(0.7); top: 4%; }
+  .arcoiris { transform: scale(0.7); top: -110px; }
+
+  .acciones {
+    top: 78px;
+    gap: 8px;
+    padding: 0 8px;
+  }
+  .btn-accion {
+    font-size: 0.78em;
+    padding: 9px 12px;
+    min-height: 44px;
+  }
+
+  .instruccion {
+    font-size: 0.78em;
+    padding: 0 10px;
+    bottom: max(10px, env(safe-area-inset-bottom));
+  }
+
+  .modal-caja {
+    width: min(94%, 380px);
+    padding: 24px 18px;
+    max-height: 85dvh;
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .cabeza { width: 52px; height: 52px; }
+  .tallo { height: 54px; }
+
+  .instruccion-universo {
+    font-size: 0.78em;
+    padding: 0 10px;
+    bottom: max(14px, env(safe-area-inset-bottom));
+  }
+  .tarjeta-mensaje {
+    width: min(92%, 340px);
+    bottom: max(60px, calc(60px + env(safe-area-inset-bottom)));
+  }
+}
+
+@media (max-width: 380px) {
+  .acciones { gap: 6px; }
+  .btn-accion { font-size: 0.72em; padding: 8px 10px; }
+  .bienvenida { font-size: 0.75em; }
+}
+
+/* Móvil en horizontal: pantalla baja, hay que compactar todo verticalmente */
+@media (max-height: 480px) and (orientation: landscape) {
+  .titulo-box { top: max(6px, env(safe-area-inset-top)); }
+  .titulo { font-size: clamp(1em, 4vw, 1.5em); }
+  .bienvenida { display: none; }
+
+  .sun-container { transform: scale(0.5); top: 2%; }
+  .arcoiris { transform: scale(0.5); top: -140px; }
+
+  .acciones {
+    top: 54px;
+    gap: 6px;
+  }
+  .btn-accion {
+    font-size: 0.7em;
+    padding: 6px 10px;
+    min-height: 34px;
+  }
+
+  .instruccion { display: none; }
+
+  .modal-caja {
+    max-height: 90dvh;
+    padding: 18px 16px;
+  }
+
+  .cabeza { width: 40px; height: 40px; }
+  .tallo { height: 40px; }
+}
