@@ -40,6 +40,7 @@
     <button id="btnPassword" class="btn-accion btn-candado" aria-label="Abrir mensaje secreto con contraseña">🔒 Mensaje Secreto</button>
     <button id="btnUniverso" class="btn-accion btn-universo" aria-label="Ir a la sección del universo">🪐 Ir al Universo</button>
     <button id="btnCarta" class="btn-accion btn-carta" aria-label="Leer la carta completa">📜 Carta Completa</button>
+    <button id="btnMasSorpresas" class="btn-accion btn-sorpresas" aria-label="Ver más sorpresas especiales">✨ Más Sorpresas</button>
     <button id="btnRespuesta" class="btn-accion btn-respuesta" aria-label="Enviar una respuesta a Katherine">💌 Enviar Respuesta</button>
     <button id="btnCierre" class="btn-accion btn-cierre" aria-label="Terminar la visita al jardín">🌙 Terminar Visita</button>
   </div>
@@ -78,6 +79,53 @@
   </div>
 </div>
 
+<!-- ===================== MODAL MÁS SORPRESAS (submenú) ===================== -->
+<div class="modal-overlay" id="modalSorpresas" role="dialog" aria-modal="true">
+  <div class="modal-caja">
+    <button class="cerrar-modal" id="cerrarModalSorpresas">✖</button>
+    <h2>✨ Más Sorpresas</h2>
+    <p class="pista">Hay más cositas escondidas para ti...</p>
+    <div class="submenu-sorpresas">
+      <button id="btnConfesion" class="btn-accion btn-confesion" aria-label="Abrir una confesión especial con contraseña">💘 Solo Para Ti</button>
+      <button id="btnRetrato" class="btn-accion btn-retrato" aria-label="Ir al retrato floral secreto con PIN">🎨 Retrato Floral</button>
+    </div>
+  </div>
+</div>
+
+<!-- ===================== MODAL CONTRASEÑA CONFESIÓN ===================== -->
+<div class="modal-overlay" id="modalPasswordConfesion" role="dialog" aria-modal="true">
+  <div class="modal-caja">
+    <button class="cerrar-modal" id="cerrarModalPasswordConfesion">✖</button>
+    <h2>💘 Algo Solo Para Ti</h2>
+    <p class="pista">Esto es distinto a todo lo demás en este jardín...</p>
+    <input type="password" id="inputPasswordConfesion" placeholder="Escribe la contraseña...">
+    <button id="btnConfirmarConfesion" class="btn-confirmar btn-confirmar-confesion">Abrir 💘</button>
+    <p id="errorPasswordConfesion" class="error-msg"></p>
+  </div>
+</div>
+
+<!-- ===================== MODAL CONFESIÓN REVELADA ===================== -->
+<div class="modal-overlay" id="modalConfesion" role="dialog" aria-modal="true">
+  <div class="modal-caja confesion">
+    <button class="cerrar-modal" id="cerrarModalConfesion">✖</button>
+    <div class="corazones-flotantes" id="corazonesConfesion"></div>
+    <h2>💘 Lo que nunca te había dicho así</h2>
+    <div class="texto-confesion" id="textoConfesion"></div>
+  </div>
+</div>
+
+<!-- ===================== MODAL PIN RETRATO FLORAL ===================== -->
+<div class="modal-overlay" id="modalPinRetrato" role="dialog" aria-modal="true">
+  <div class="modal-caja">
+    <button class="cerrar-modal" id="cerrarModalPinRetrato">✖</button>
+    <h2>🎨 Retrato Floral</h2>
+    <p class="pista">Ingresa el PIN para entrar a esta sección...</p>
+    <input type="tel" inputmode="numeric" maxlength="10" id="inputPinRetrato" placeholder="•••">
+    <button id="btnConfirmarPinRetrato" class="btn-confirmar btn-confirmar-retrato">Entrar 🎨</button>
+    <p id="errorPinRetrato" class="error-msg"></p>
+  </div>
+</div>
+
 <!-- ===================== MODAL RESPUESTA ===================== -->
 <div class="modal-overlay" id="modalRespuesta" role="dialog" aria-modal="true">
   <div class="modal-caja respuesta">
@@ -110,6 +158,36 @@
     <span id="contadorMensajes"></span>
   </div>
   <p class="instruccion-universo">✨ Toca las estrellas que orbitan Saturno, la constelación de corazón o el otro planeta ✨</p>
+</div>
+
+<!-- ===================== RETRATO FLORAL ===================== -->
+<div class="retrato" id="seccionRetrato">
+  <button class="btn-volver" id="btnVolverRetrato">🌸 Volver al Jardín</button>
+  <div class="corazones-flotantes" id="corazonesRetrato"></div>
+
+  <button id="btnDibujarRetrato" class="btn-accion btn-dibujar-retrato">🎨 El Retrato</button>
+  <p id="estadoRetrato" class="error-msg"></p>
+
+  <div class="retrato-contenedor" id="retratoContenedor">
+    <img id="fotoRetratoOrigen" src="kat.png" alt="" style="display:none;">
+    <canvas id="canvasRetrato" class="canvas-retrato"></canvas>
+    <div class="cortina-retrato" id="cortinaRetrato"></div>
+    <div class="lapiz-retrato" id="lapizRetrato">✏️</div>
+    <div class="flores-retrato" id="floresRetrato"></div>
+  </div>
+
+  <div class="panel-pines">
+    <p class="instruccion-pines">🌱 Ingresa un PIN para revelar una flor de tu retrato (<span id="progresoFlores">0/6</span>)</p>
+    <div class="entrada-pin">
+      <input type="tel" inputmode="numeric" maxlength="4" id="inputPinFlor" placeholder="PIN">
+      <button id="btnRevelarFlor" class="btn-confirmar btn-confirmar-retrato">Revelar 🌸</button>
+    </div>
+    <p id="errorPinFlor" class="error-msg"></p>
+  </div>
+
+  <div class="tarjeta-mensaje" id="tarjetaMensajeFlor">
+    <p id="textoMensajeFlor"></p>
+  </div>
 </div>
 
 <!-- ===================== PANTALLA DE CIERRE ===================== -->
