@@ -215,6 +215,343 @@ function lanzarCorazones() {
 }
 
 /* ============================================================
+   ✨ SUBMENÚ "MÁS SORPRESAS"
+   Agrupa los botones de Confesión y Retrato Floral en un solo lugar.
+============================================================ */
+const modalSorpresas = document.getElementById('modalSorpresas');
+const btnMasSorpresas = document.getElementById('btnMasSorpresas');
+
+btnMasSorpresas.addEventListener('click', () => {
+  modalSorpresas.classList.add('activo');
+});
+document.getElementById('cerrarModalSorpresas').addEventListener('click', () => {
+  modalSorpresas.classList.remove('activo');
+});
+
+/* ============================================================
+   💘 CONFESIÓN ESPECIAL (sección con contraseña propia)
+   👉 Para cambiar la contraseña, edita el texto entre comillas
+      de la siguiente línea. Puede ser cualquier palabra o frase.
+============================================================ */
+const CONTRASENA_CONFESION = 'estrellafugaz';
+
+const modalPasswordConfesion = document.getElementById('modalPasswordConfesion');
+const modalConfesion = document.getElementById('modalConfesion');
+const btnConfesion = document.getElementById('btnConfesion');
+const btnConfirmarConfesion = document.getElementById('btnConfirmarConfesion');
+const inputPasswordConfesion = document.getElementById('inputPasswordConfesion');
+const errorPasswordConfesion = document.getElementById('errorPasswordConfesion');
+const textoConfesion = document.getElementById('textoConfesion');
+
+// 👉 Aquí puedes editar el texto de la confesión, párrafo por párrafo,
+// para hacerlo tan personal y específico como quieras.
+const parrafosConfesion = [
+  'Katherine, hay algo que llevo tiempo queriendo decirte bien, sin nervios, sin quitarle palabras por miedo. Así que decidí escribirlo aquí, tal cual lo siento, sin filtros.',
+  'No es otra frase bonita para adornar este jardín. Es la verdad: desde que estás en mi vida, hasta los días grises se sienten distintos, y eso no lo había sentido antes con nadie.',
+  'Me da un poco de miedo decírtelo tan directo, porque hacerlo así, sin esconderlo detrás de una flor o una estrella, me deja expuesto. Pero prefiero arriesgarme a decírtelo de verdad, a quedarme callado y que nunca sepas todo lo que significas para mí.',
+  'Quiero quererte sin miedo. Quiero ser de las personas que te hacen sentir seguridad, no dudas. Y quiero que, cada vez que vuelvas a este jardín, sepas que esto que siento por ti es real, es serio, y no tiene fecha de vencimiento.',
+  'Katherine, te quiero. No de la forma fácil y segura que se dice sin pensar, sino de la forma que da un poco de vértigo decir en voz alta porque es cierta. Gracias por dejarme quererte así. 💘'
+];
+
+btnConfesion.addEventListener('click', () => {
+  modalSorpresas.classList.remove('activo');
+  inputPasswordConfesion.value = '';
+  errorPasswordConfesion.textContent = '';
+  modalPasswordConfesion.classList.add('activo');
+  setTimeout(() => inputPasswordConfesion.focus(), 100);
+});
+
+document.getElementById('cerrarModalPasswordConfesion').addEventListener('click', () => {
+  modalPasswordConfesion.classList.remove('activo');
+});
+
+document.getElementById('cerrarModalConfesion').addEventListener('click', () => {
+  modalConfesion.classList.remove('activo');
+});
+
+function intentarContrasenaConfesion() {
+  const valor = inputPasswordConfesion.value.trim().toLowerCase();
+  if (valor === CONTRASENA_CONFESION.toLowerCase()) {
+    modalPasswordConfesion.classList.remove('activo');
+    revelarConfesion();
+  } else {
+    errorPasswordConfesion.textContent = 'Contraseña incorrecta, ¡inténtalo de nuevo! 💘';
+  }
+}
+
+btnConfirmarConfesion.addEventListener('click', intentarContrasenaConfesion);
+inputPasswordConfesion.addEventListener('keydown', (e) => {
+  if (e.key === 'Enter') intentarContrasenaConfesion();
+});
+
+function revelarConfesion() {
+  textoConfesion.innerHTML = parrafosConfesion.map(p => `<p>${p}</p>`).join('');
+  modalConfesion.classList.add('activo');
+  lanzarCorazonesEn('corazonesConfesion');
+}
+
+/* ============================================================
+   🎨 RETRATO FLORAL (sección secreta con PIN)
+   👉 Cambia el PIN de entrada aquí abajo:
+============================================================ */
+const PIN_RETRATO = '28/07/2010';
+
+// 👉 Cada flor tiene su propio PIN y su mensaje. Puedes cambiar los
+// PIN, los mensajes, o agregar/quitar flores (ajusta top/left en %).
+const floresRetratoConfig = [
+  { pin: '0101', top: '16%', left: '32%', mensaje: 'Esta flor es por la primera vez que me hiciste reír de verdad. 🌸' },
+  { pin: '0202', top: '14%', left: '68%', mensaje: 'Esta flor es por tu forma de mirar las cosas simples con asombro. 🌷' },
+  { pin: '0303', top: '40%', left: '18%', mensaje: 'Esta flor es por cada mensaje tuyo que me alegra el día sin que lo sepas. 🌻' },
+  { pin: '0404', top: '42%', left: '82%', mensaje: 'Esta flor es por tu paciencia conmigo, incluso cuando no la merezco. 🌺' },
+  { pin: '0505', top: '68%', left: '30%', mensaje: 'Esta flor es por todo lo que aún no te he dicho y algún día te diré. 🌼' },
+  { pin: '0606', top: '70%', left: '70%', mensaje: 'Esta flor es porque, poco a poco, te fuiste convirtiendo en mi lugar favorito. 💐' }
+];
+const emojisFloresRetrato = ['🌸', '🌷', '🌻', '🌺', '🌼', '💐'];
+
+const modalPinRetrato = document.getElementById('modalPinRetrato');
+const seccionRetrato = document.getElementById('seccionRetrato');
+const btnRetrato = document.getElementById('btnRetrato');
+const btnConfirmarPinRetrato = document.getElementById('btnConfirmarPinRetrato');
+const inputPinRetrato = document.getElementById('inputPinRetrato');
+const errorPinRetrato = document.getElementById('errorPinRetrato');
+const btnVolverRetrato = document.getElementById('btnVolverRetrato');
+const btnDibujarRetrato = document.getElementById('btnDibujarRetrato');
+const retratoContenedor = document.getElementById('retratoContenedor');
+const canvasRetrato = document.getElementById('canvasRetrato');
+const fotoRetratoOrigen = document.getElementById('fotoRetratoOrigen');
+const floresRetratoContenedor = document.getElementById('floresRetrato');
+const inputPinFlor = document.getElementById('inputPinFlor');
+const btnRevelarFlor = document.getElementById('btnRevelarFlor');
+const errorPinFlor = document.getElementById('errorPinFlor');
+const progresoFlores = document.getElementById('progresoFlores');
+const tarjetaMensajeFlor = document.getElementById('tarjetaMensajeFlor');
+const textoMensajeFlor = document.getElementById('textoMensajeFlor');
+const estadoRetrato = document.getElementById('estadoRetrato');
+
+let floresReveladas = new Set();
+let fotoRetratoFallo = false;
+
+fotoRetratoOrigen.addEventListener('error', () => {
+  fotoRetratoFallo = true;
+  estadoRetrato.textContent = `No se pudo cargar la foto "${fotoRetratoOrigen.getAttribute('src')}". Verifica que el archivo exista en la misma carpeta que index.html (mayúsculas/minúsculas incluidas).`;
+});
+
+// Crea (una sola vez) los elementos de flor, ocultos, listos para revelarse
+function prepararFloresRetrato() {
+  if (floresRetratoContenedor.children.length > 0) return;
+  floresRetratoConfig.forEach((flor, indice) => {
+    const span = document.createElement('span');
+    span.className = 'flor-retrato';
+    span.style.top = flor.top;
+    span.style.left = flor.left;
+    span.textContent = emojisFloresRetrato[indice % emojisFloresRetrato.length];
+    span.dataset.pin = flor.pin;
+    floresRetratoContenedor.appendChild(span);
+  });
+}
+
+progresoFlores.textContent = `0/${floresRetratoConfig.length}`;
+
+btnRetrato.addEventListener('click', () => {
+  modalSorpresas.classList.remove('activo');
+  inputPinRetrato.value = '';
+  errorPinRetrato.textContent = '';
+  modalPinRetrato.classList.add('activo');
+  setTimeout(() => inputPinRetrato.focus(), 100);
+});
+
+document.getElementById('cerrarModalPinRetrato').addEventListener('click', () => {
+  modalPinRetrato.classList.remove('activo');
+});
+
+function intentarPinRetrato() {
+  if (inputPinRetrato.value.trim() === PIN_RETRATO) {
+    modalPinRetrato.classList.remove('activo');
+    prepararFloresRetrato();
+    retratoContenedor.classList.remove('dibujando');
+    btnDibujarRetrato.disabled = false;
+    btnDibujarRetrato.textContent = '🎨 El Retrato';
+    estadoRetrato.textContent = '';
+    seccionRetrato.classList.add('activo');
+  } else {
+    errorPinRetrato.textContent = 'PIN incorrecto, ¡inténtalo de nuevo! 🎨';
+  }
+}
+btnConfirmarPinRetrato.addEventListener('click', intentarPinRetrato);
+inputPinRetrato.addEventListener('keydown', (e) => {
+  if (e.key === 'Enter') intentarPinRetrato();
+});
+
+btnVolverRetrato.addEventListener('click', () => {
+  seccionRetrato.classList.remove('activo');
+  tarjetaMensajeFlor.classList.remove('activa');
+});
+
+// Convierte la foto real en un efecto de "dibujo" usando canvas, en dos capas:
+// 1) sombreado tipo boceto a lápiz (grises con más contraste/brillo, invertido
+//    y desenfocado, mezclado en color-dodge) — el contraste/brillo extra ayuda
+//    mucho cuando la foto original está oscura.
+// 2) líneas de contorno (detección de bordes) encima, para que se note el trazo
+//    como si estuviera dibujado a mano, no solo una foto con filtro.
+let retratoDibujado = false;
+
+function generarBocetoRetrato() {
+  const ctx = canvasRetrato.getContext('2d');
+  const ancho = fotoRetratoOrigen.naturalWidth;
+  const alto = fotoRetratoOrigen.naturalHeight;
+  if (!ancho || !alto) return false;
+
+  canvasRetrato.width = ancho;
+  canvasRetrato.height = alto;
+
+  // Base en gris, con un realce suave (evita manchas duras en fotos oscuras)
+  const grisBase = document.createElement('canvas');
+  grisBase.width = ancho;
+  grisBase.height = alto;
+  const gctx = grisBase.getContext('2d');
+  gctx.filter = 'grayscale(1) contrast(1.12) brightness(1.18)';
+  gctx.drawImage(fotoRetratoOrigen, 0, 0, ancho, alto);
+
+  // Capa 1: sombreado tipo boceto a lápiz, con un desenfoque más amplio
+  // para que el resultado sea suave (tipo grafito) y no un mapa de manchas
+  ctx.drawImage(grisBase, 0, 0, ancho, alto);
+  ctx.filter = `invert(1) blur(${Math.max(6, ancho * 0.035)}px)`;
+  ctx.globalCompositeOperation = 'color-dodge';
+  ctx.drawImage(grisBase, 0, 0, ancho, alto);
+  ctx.globalCompositeOperation = 'source-over';
+  ctx.filter = 'none';
+
+  // Capa 2: líneas de contorno suaves y sutiles, solo para marcar las
+  // facciones principales, no un contorno duro sobre toda la imagen
+  try {
+    dibujarLineasDeContorno(ctx, grisBase, ancho, alto);
+  } catch (err) {
+    console.warn('No se pudieron generar las líneas de contorno, se deja solo el sombreado:', err);
+  }
+
+  return true;
+}
+
+// Detección de bordes (Sobel) con intensidad gradual (no blanco/negro puro),
+// para que las líneas se vean como trazo suave y no como manchas duras.
+function dibujarLineasDeContorno(ctxDestino, grisBase, ancho, alto) {
+  const borde = document.createElement('canvas');
+  borde.width = ancho;
+  borde.height = alto;
+  const bctx = borde.getContext('2d');
+  bctx.filter = 'blur(1.5px)';
+  bctx.drawImage(grisBase, 0, 0, ancho, alto);
+  bctx.filter = 'none';
+
+  const origen = bctx.getImageData(0, 0, ancho, alto);
+  const salida = bctx.createImageData(ancho, alto);
+  const datos = origen.data;
+  const out = salida.data;
+  const gx = [-1, 0, 1, -2, 0, 2, -1, 0, 1];
+  const gy = [-1, -2, -1, 0, 0, 0, 1, 2, 1];
+  const umbral = 45;
+
+  for (let y = 1; y < alto - 1; y++) {
+    for (let x = 1; x < ancho - 1; x++) {
+      let sx = 0, sy = 0, k = 0;
+      for (let j = -1; j <= 1; j++) {
+        for (let i = -1; i <= 1; i++) {
+          const val = datos[((y + j) * ancho + (x + i)) * 4];
+          sx += val * gx[k];
+          sy += val * gy[k];
+          k++;
+        }
+      }
+      const magnitud = Math.sqrt(sx * sx + sy * sy);
+      const idx = (y * ancho + x) * 4;
+      out[idx] = out[idx + 1] = out[idx + 2] = 35;
+      out[idx + 3] = magnitud > umbral ? Math.min(120, (magnitud - umbral) * 0.55) : 0;
+    }
+  }
+  bctx.putImageData(salida, 0, 0);
+  ctxDestino.globalAlpha = 0.8;
+  ctxDestino.drawImage(borde, 0, 0);
+  ctxDestino.globalAlpha = 1;
+}
+
+function activarDibujoRetrato() {
+  retratoContenedor.classList.remove('dibujando');
+  void retratoContenedor.offsetWidth; // fuerza reflow para poder repetir la animación
+  retratoContenedor.classList.add('dibujando');
+  btnDibujarRetrato.disabled = true;
+  btnDibujarRetrato.textContent = '🎨 Dibujando...';
+  setTimeout(() => {
+    btnDibujarRetrato.disabled = false;
+    btnDibujarRetrato.textContent = '🎨 Redibujar';
+  }, 4600);
+}
+
+btnDibujarRetrato.addEventListener('click', () => {
+  estadoRetrato.textContent = '';
+
+  if (fotoRetratoFallo) {
+    estadoRetrato.textContent = `No se pudo cargar la foto "${fotoRetratoOrigen.getAttribute('src')}". Verifica que el archivo exista en la misma carpeta que index.html.`;
+    return;
+  }
+  if (retratoDibujado) {
+    activarDibujoRetrato();
+    return;
+  }
+  const listo = generarBocetoRetrato();
+  if (listo) {
+    retratoDibujado = true;
+    activarDibujoRetrato();
+  } else {
+    btnDibujarRetrato.textContent = '🎨 Cargando foto...';
+    btnDibujarRetrato.disabled = true;
+    fotoRetratoOrigen.addEventListener('load', () => {
+      generarBocetoRetrato();
+      retratoDibujado = true;
+      activarDibujoRetrato();
+    }, { once: true });
+  }
+});
+
+function intentarPinFlor() {
+  const valor = inputPinFlor.value.trim();
+  const flor = floresRetratoConfig.find(f => f.pin === valor);
+
+  if (!flor) {
+    errorPinFlor.textContent = 'Ese PIN no abre ninguna flor todavía. 🌱';
+    return;
+  }
+  errorPinFlor.textContent = '';
+
+  if (floresReveladas.has(valor)) {
+    textoMensajeFlor.textContent = flor.mensaje;
+    tarjetaMensajeFlor.classList.add('activa');
+    inputPinFlor.value = '';
+    return;
+  }
+
+  floresReveladas.add(valor);
+  const span = floresRetratoContenedor.querySelector(`[data-pin="${valor}"]`);
+  if (span) span.classList.add('visible');
+
+  textoMensajeFlor.textContent = flor.mensaje;
+  tarjetaMensajeFlor.classList.add('activa');
+  progresoFlores.textContent = `${floresReveladas.size}/${floresRetratoConfig.length}`;
+  inputPinFlor.value = '';
+
+  if (floresReveladas.size === floresRetratoConfig.length) {
+    setTimeout(() => {
+      textoMensajeFlor.textContent = '🌷 Tu retrato floral está completo. Cada flor que abriste es una razón real de por qué te quiero. Gracias por llegar hasta aquí. 💚';
+      tarjetaMensajeFlor.classList.add('activa');
+      lanzarCorazonesEn('corazonesRetrato');
+    }, 900);
+  }
+}
+btnRevelarFlor.addEventListener('click', intentarPinFlor);
+inputPinFlor.addEventListener('keydown', (e) => {
+  if (e.key === 'Enter') intentarPinFlor();
+});
+
+/* ============================================================
    CARTA COMPLETA
 ============================================================ */
 const modalCarta = document.getElementById('modalCarta');
